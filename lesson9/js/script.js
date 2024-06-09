@@ -1,60 +1,33 @@
-function Company(name){
-    this.name = name;
-    // Employers[]
-    this.departmants =
-        { WEB: [] }
-    ;
-    // @var Employ
-    this.addEmploy = (employ, department) => {
-        if (!(employ instanceof Employ)){
-            console.log("Wrong data");
-            return;
-        }
-        department = department.toUpperCase();
-        if (!this.departmants[department]) {
-            this.departmants[department] = [];
-        }
-        this.departmants[department].push(employ);
-    }
-    this.getDepartmentSalary = (department) => {
-        department = department.toUpperCase();
-        if (!this.departmants[department]) {
-            console.log("Department not found");
-            return 0;
-        }
-        const salary = this.departmants[department].reduce((accumulator, department) => {
+const company = {
+    sales: [{name: "John", salary: 100}, {name: "Jane", salary: 200}],
+    development: {
+        web: [{name: "Alex", salary: 200}, {name: "July", salary: 400}],
+        internals: [{name: "Jack", salary: 1300}],
+    }, //2200
+  //  qa: [{name: "Victor", salary: 100}], //2300
+
+};
+const totalSum = function (department) {
+    let salaryOfDepartment = 0;
+    if (Array.isArray(department)) {
+        salaryOfDepartment = department.reduce((accumulator, department) => {
             if (department.hasOwnProperty('salary') && typeof department.salary === 'number') {
                 return accumulator + department.salary;
             }
             return accumulator;
         }, 0);
 
-        return salary;
-    }
-    this.getTotalSalary = () => {
-        let total = 0;
-        for (const department in this.departmants) {
-            total += this.getDepartmentSalary(department);
+        return salaryOfDepartment;
+    } else {
+        for (let subDepartment in department) {
+            salaryOfDepartment += totalSum(department[subDepartment], salaryOfDepartment);
         }
-        return total;
+        return salaryOfDepartment;
+
     }
-};
-//use different initialisation for practise
-const Employ = function (name, salary)  {
-    this.name = name;
-    this.salary = salary;
 }
 
-const googleCompany = new Company('Google');
-googleCompany.addEmploy(new Employ('Victor', 500), "PM");
-googleCompany.addEmploy(new Employ('Edmunt', 600), "PM");
-googleCompany.addEmploy(new Employ('Masha', 30), "HR");
-googleCompany.addEmploy(new Employ('Kate', 30), "HR");
-googleCompany.addEmploy(new Employ('Martin', 900), "web");
-
-console.log(googleCompany.getDepartmentSalary("QR"));
-console.log(googleCompany.getDepartmentSalary("HR"));
-console.log(googleCompany.getTotalSalary());
+console.log(totalSum(company));
 
 
 
