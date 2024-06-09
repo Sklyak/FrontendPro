@@ -6,6 +6,10 @@ function Company(name){
     ;
     // @var Employ
     this.addEmploy = (employ, department) => {
+        if (!(employ instanceof Employ)){
+            console.log("Wrong data");
+            return;
+        }
         department = department.toUpperCase();
         if (!this.departmants[department]) {
             this.departmants[department] = [];
